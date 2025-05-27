@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 # ✅ Todo Task Management Web Application
 
 ## 🚀 Overview
@@ -208,3 +209,6 @@ project-root/
 ---
 
 > Thank you for checking out this project! ✨ Feedback and contributions are welcome.
+=======
+# Task_Management
+>>>>>>> dd477b25341f51c0180bab6c03d04d9403c63cf8
