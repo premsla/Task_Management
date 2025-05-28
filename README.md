@@ -1,6 +1,6 @@
-# ✅ Todo Task Management Web Application
+#  Todo Task Management Web Application
 
-## 🚀 Overview
+##  Overview
 
 This is a full-stack **Todo Task Management Web Application** built as part of the **Katomaran Full Stack Hackathon**. The app allows users to log in using social platforms (Google, GitHub, Facebook) and perform full CRUD operations on their personal to-do tasks. It highlights skills in frontend design, backend development, API structuring, database modeling, authentication, and cloud deployment.
 
@@ -12,7 +12,7 @@ This is a full-stack **Todo Task Management Web Application** built as part of t
 
 ---
 
-## 🧰 Tech Stack
+##  Tech Stack
 
 ### Backend
 
@@ -39,15 +39,15 @@ This is a full-stack **Todo Task Management Web Application** built as part of t
 
 ---
 
-## ✨ Features
+##  Features
 
-### 🔐 Authentication
+###  Authentication
 
 - Social login via Google, GitHub, Facebook
 - JWT-based authentication
 - Secure sessions using HTTP-only cookies (optional fallback)
 
-### 📋 Task Management
+###  Task Management
 
 - Create new tasks with title, description, due date
 - Edit existing tasks
@@ -55,7 +55,7 @@ This is a full-stack **Todo Task Management Web Application** built as part of t
 - Delete tasks
 - Tasks are private per user
 
-### 🎨 UI/UX
+###  UI/UX
 
 - Mobile-first responsive design
 - Clean dashboard UI to manage tasks
@@ -63,9 +63,9 @@ This is a full-stack **Todo Task Management Web Application** built as part of t
 
 ---
 
-## 🧪 Setup Instructions
+##  Setup Instructions
 
-### ✅ Backend Setup
+###  Backend Setup
 
 1. Navigate to the server directory:
 
@@ -103,7 +103,7 @@ If successful, you will see `Server is running...` and `Database Connected`.
 
 ---
 
-### ✅ Frontend Setup
+###  Frontend Setup
 
 1. Navigate to the client directory:
 
@@ -128,7 +128,7 @@ Visit [http://localhost:5173](http://localhost:5173) to view the frontend.
 
 ---
 
-## 🌍 API Endpoints
+##  API Endpoints
 
 | Method | Endpoint             | Description                   |
 | ------ | -------------------- | ----------------------------- |
@@ -142,7 +142,7 @@ Visit [http://localhost:5173](http://localhost:5173) to view the frontend.
 
 ---
 
-## 🗂️ Folder Structure
+##  Folder Structure
 
 ```
 project-root/
@@ -162,14 +162,14 @@ project-root/
 
 ---
 
-## 📷 Architecture Diagram
+##  Architecture Diagram
 
 ![Architecture Diagram](https://your-image-link.com/diagram.png)
 
 ---
 
 
-## 📌 Assumptions
+##  Assumptions
 
 - Tasks are private per user and not shared between users.
 - Social login buttons are shown only if respective credentials are configured.
@@ -178,7 +178,7 @@ project-root/
 
 ---
 
-## 📝 Additional Notes
+##  Additional Notes
 
 - The frontend is mobile responsive using Tailwind CSS.
 - The backend is modular with separate controllers and route handling.
@@ -186,9 +186,9 @@ project-root/
 
 ---
 
-## 📬 Submission Info
+##  Submission Info
 
-✅ This project is a part of a hackathon run by [https://www.katomaran.com](https://www.katomaran.com)
+This project is a part of a hackathon run by [https://www.katomaran.com](https://www.katomaran.com)
 
 
 ---
