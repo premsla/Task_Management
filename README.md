@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 # ✅ Todo Task Management Web Application
 
 ## 🚀 Overview
@@ -196,19 +195,10 @@ project-root/
 
 ✅ This project is a part of a hackathon run by [https://www.katomaran.com](https://www.katomaran.com)
 
-📅 Submission Deadline: **12 PM, Wednesday, May 28, 2025**
 
 ---
 
-## 👤 Author
-
-- **Name:** Your Name
-- **GitHub:** [github.com/yourusername](https://github.com/yourusername)
-- **Email:** your.email@example.com
-
----
 
 > Thank you for checking out this project! ✨ Feedback and contributions are welcome.
 =======
-# Task_Management
->>>>>>> dd477b25341f51c0180bab6c03d04d9403c63cf8
+
