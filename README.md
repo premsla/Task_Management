@@ -6,9 +6,9 @@ This is a full-stack **Todo Task Management Web Application** built as part of t
 
 ---
 
-## 🌐 Live Demo
+## 🎥 Project Walkthrough Video
 
-🔗 [View the Live Application](https://your-live-app-url.com)
+📹 [Watch the Demo Video on Loom](https://drive.google.com/file/d/16oExM62GwxW2tUFelyY77RHiPeOctA83/view?usp=sharing)
 
 ---
 
@@ -168,11 +168,6 @@ project-root/
 
 ---
 
-## 🎥 Project Walkthrough Video
-
-📹 [Watch the Demo Video on Loom](https://www.loom.com/share/your-video-id)
-
----
 
 ## 📌 Assumptions
 
