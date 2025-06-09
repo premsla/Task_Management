@@ -132,8 +132,6 @@ Visit [http://localhost:5173](http://localhost:5173) to view the frontend.
 | PUT    | `/api/tasks/:id`     | Update a task                 |
 | DELETE | `/api/tasks/:id`     | Delete a task                 |
 | GET    | `/api/auth/google`   | Google login                  |
-| GET    | `/api/auth/github`   | GitHub login                  |
-| GET    | `/api/auth/facebook` | Facebook login                |
 
 ---
 
