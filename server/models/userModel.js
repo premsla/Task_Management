@@ -11,7 +11,7 @@ const userSchema = new mongoose.Schema({
   isActive: { type: Boolean, default: true },
   // Social login fields
   socialLogin: {
-    provider: { type: String, enum: ['google', 'github', 'facebook', 'local'], default: 'local' },
+    provider: { type: String, enum: ['google', 'local'], default: 'local' },
     providerId: { type: String },
     avatar: { type: String }
   },

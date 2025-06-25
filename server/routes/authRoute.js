@@ -1,10 +1,38 @@
+// Debug: confirm authRoute is loaded
+console.log('⚙️ authRoute routes loaded');
 import express from 'express';
 import jwt from 'jsonwebtoken';
 import passport from '../config/passport.js';
-import createJWT from '../utils/jwt.js';
+import createJWT, { SECRET } from '../utils/jwt.js';
 import User from '../models/userModel.js';
 
+// Base client URL for redirects
+const CLIENT_URL = process.env.CLIENT_URL || 'http://localhost:5173';
+
 const router = express.Router();
+
+// Make sure Firebase Admin SDK is initialized
+router.post('/firebase-social-login', async (req, res) => {
+  try {
+    const { token } = req.body;
+
+    const decodedToken = await getAuth().verifyIdToken(token);
+    const email = decodedToken.email;
+
+    let user = await User.findOne({ email });
+
+    if (!user) {
+      user = await User.create({ email, name: decodedToken.name });
+    }
+
+    const jwtToken = createJWT(res, user._id);
+    res.status(200).json({ success: true, token: jwtToken, user });
+  } catch (error) {
+    console.error("Firebase social login error:", error);
+    res.status(401).json({ success: false, message: "Invalid Firebase token" });
+  }
+});
+
 
 // Test route to verify auth routes are working
 router.get('/test', (req, res) => {
@@ -13,25 +41,30 @@ router.get('/test', (req, res) => {
 
 // Google OAuth routes - only if Google strategy is configured
 if (process.env.GOOGLE_CLIENT_ID && process.env.GOOGLE_CLIENT_SECRET) {
-  router.get('/google',
-    passport.authenticate('google', { scope: ['profile', 'email'] })
-  );
+  // Initiate Google OAuth, preserve origin (login/signup) via state
+  router.get('/google', (req, res, next) => {
+    const from = req.query.from || 'login';
+    passport.authenticate('google', {
+      scope: ['profile', 'email'],
+      state: from
+    })(req, res, next);
+  });
 
-router.get('/google/callback',
-  passport.authenticate('google', { failureRedirect: '/log-in' }),
-  async (req, res) => {
-    try {
-      // Generate JWT token
-      const token = createJWT(res, req.user._id);
-
-      // Redirect to frontend with success
-      res.redirect(`${process.env.CLIENT_URL}/dashboard?token=${token}`);
-    } catch (error) {
-      console.error('Google auth callback error:', error);
-      res.redirect(`${process.env.CLIENT_URL}/log-in?error=auth_failed`);
+  router.get('/google/callback',
+    passport.authenticate('google', { failureRedirect: '/log-in' }),
+    async (req, res) => {
+      try {
+        // Generate JWT token
+        const token = createJWT(res, req.user._id);
+        // Determine redirect path based on state
+        const from = req.query.state === 'signup' ? 'signup' : 'log-in';
+        res.redirect(`${CLIENT_URL}/${from}?token=${token}`);
+      } catch (error) {
+        console.error('Google auth callback error:', error);
+        res.redirect(`${CLIENT_URL}/log-in?error=auth_failed`);
+      }
     }
-  }
-);
+  );
 } else {
   // Fallback route when Google OAuth is not configured
   router.get('/google', (req, res) => {
@@ -41,7 +74,6 @@ router.get('/google/callback',
     });
   });
 }
-
 // GitHub OAuth routes - only if GitHub strategy is configured
 if (process.env.GITHUB_CLIENT_ID && process.env.GITHUB_CLIENT_SECRET) {
   router.get('/github',
@@ -106,6 +138,7 @@ router.get('/facebook/callback',
 
 // Social login success endpoint (for handling token from URL)
 router.post('/social-success', async (req, res) => {
+  console.log('🔔 /social-success hit with body:', req.body);
   try {
     const { token } = req.body;
 
@@ -114,7 +147,7 @@ router.post('/social-success', async (req, res) => {
     }
 
     // Verify token and get user info
-    const decoded = jwt.verify(token, process.env.JWT_SECRET);
+    const decoded = jwt.verify(token, SECRET);
     const user = await User.findById(decoded.userId).select('-password');
 
     if (!user) {

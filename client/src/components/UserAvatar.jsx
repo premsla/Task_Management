@@ -9,11 +9,10 @@ import { useLogoutMutation } from "../redux/slices/api/authApiSlice";
 import { logout } from "../redux/slices/authSlice";
 import { getInitials } from "../utils";
 import AddUser from "./AddUser";
-import ChangePassword from "./ChangePassword";
 
 const UserAvatar = () => {
   const [open, setOpen] = useState(false);
-  const [openPassword, setOpenPassword] = useState(false);
+
   const { user } = useSelector((state) => state.auth);
   const [logoutUser] = useLogoutMutation();
   const dispatch = useDispatch();
@@ -65,17 +64,6 @@ const UserAvatar = () => {
                   )}
                 </Menu.Item>
 
-                <Menu.Item>
-                  {({ active }) => (
-                    <button
-                      onClick={() => setOpenPassword(true)}
-                      className={`text-gray-700 dark:text-gray-300  group flex w-full items-center rounded-md px-2 py-2 text-base`}
-                    >
-                      <FaUserLock className='mr-2' aria-hidden='true' />
-                      Change Password
-                    </button>
-                  )}
-                </Menu.Item>
 
                 <Menu.Item>
                   {({ active }) => (
@@ -95,7 +83,7 @@ const UserAvatar = () => {
       </div>
 
       <AddUser open={open} setOpen={setOpen} userData={user} />
-      <ChangePassword open={openPassword} setOpen={setOpenPassword} />
+     
     </>
   );
 };

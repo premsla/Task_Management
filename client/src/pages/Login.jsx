@@ -2,7 +2,7 @@ import { useForm } from "react-hook-form";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate, useSearchParams } from "react-router-dom";
 import { toast } from "sonner";
-import { Button, Loading, Textbox, SocialLogin } from "../components";
+import { Button, Loading, Textbox,  } from "../components";
 import { useLoginMutation } from "../redux/slices/api/authApiSlice";
 import { setCredentials } from "../redux/slices/authSlice";
 import { useEffect } from "react";
@@ -10,7 +10,7 @@ import { useEffect } from "react";
 const Login = () => {
   const { user } = useSelector((state) => state.auth);
   const [searchParams] = useSearchParams();
-  const {
+  const{
     register,
     handleSubmit,
     formState: { errors },
@@ -32,59 +32,30 @@ const Login = () => {
   };
 
   useEffect(() => {
-    // Check for social login token in URL
+    // Handle social login token or error from URL
     const token = searchParams.get('token');
-    if (token) {
-      // Handle social login success
-      handleSocialLoginSuccess(token);
-    }
-
-    // Check for social login error
+    if (token) handleSocialLoginSuccess(token);
     const error = searchParams.get('error');
-    if (error === 'auth_failed') {
-      toast.error('Social login failed. Please try again.');
-    }
+    if (error === 'auth_failed') toast.error('Social login failed. Please try again.');
+  }, [searchParams]);
 
-    user && navigate("/dashboard");
-  }, [user, searchParams]);
+  // Navigate once user is set
+  useEffect(() => {
+    if (user) navigate('/dashboard');
+  }, [user]);
 
-  const handleSocialLoginSuccess = async (token) => {
-    try {
-      // Call API to validate token and get user info
-      const response = await fetch(`${import.meta.env.VITE_APP_BASE_URL || 'http://localhost:8800'}/api/auth/social-success`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({ token }),
-      });
-
-      const data = await response.json();
-
-      if (data.success) {
-        dispatch(setCredentials(data));
-        toast.success('Login successful!');
-        navigate("/dashboard");
-      } else {
-        toast.error(data.message || 'Social login failed');
-      }
-    } catch (error) {
-      console.error('Social login error:', error);
-      toast.error('Social login failed. Please try again.');
-    }
-  };
-
+ 
   return (
     <div className='w-full min-h-screen flex items-center justify-center flex-col lg:flex-row bg-[#f3f4f6] dark:bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))] from-[#302943] via-slate-900 to-black'>
       <div className='w-full md:w-auto flex gap-0 md:gap-40 flex-col md:flex-row items-center justify-center'>
         <div className='h-full w-full lg:w-2/3 flex flex-col items-center justify-center'>
           <div className='w-full md:max-w-lg 2xl:max-w-3xl flex flex-col items-center justify-center gap-5 md:gap-y-10 2xl:-mt-20'>
             <span className='flex gap-1 py-1 px-3 border rounded-full text-sm md:text-base dark:border-gray-700 dark:text-blue-400 border-gray-300 text-gray-600'>
-              Manage all your task in one place!
+              Login to your account
             </span>
             <p className='flex flex-col gap-0 md:gap-4 text-4xl md:text-6xl 2xl:text-7xl font-black text-center dark:text-gray-400 text-blue-700'>
-              <span>Cloud-based</span>
-              <span>Task Manager</span>
+              <span></span>
+              <span>Idea Box</span>
             </p>
 
             <div className='cell'>
@@ -143,9 +114,7 @@ const Login = () => {
               />
             )}
 
-            {/* Social Login Section */}
-            <SocialLogin />
-
+         
             <div className='flex items-center justify-center gap-2 text-sm text-gray-600 dark:text-gray-400 mt-4'>
               <span>Don't have an account?</span>
               <a href='/signup' className='text-blue-600 hover:underline'>Sign up</a>

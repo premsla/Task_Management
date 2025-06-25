@@ -34,11 +34,19 @@ export const postApiSlice = apiSlice.injectEndpoints({
     }),
 
     getAllTask: builder.query({
-      query: ({ strQuery, isTrashed, search }) => ({
-        url: `${TASKS_URL}?stage=${strQuery}&isTrashed=${isTrashed}&search=${search}`,
-        method: "GET",
-        credentials: "include",
-      }),
+      query: ({ strQuery, isTrashed, search }) => {
+        // Build query params without empty stage
+        const params = [];
+        if (strQuery) params.push(`stage=${strQuery}`);
+        params.push(`isTrashed=${isTrashed}`);
+        if (search) params.push(`search=${search}`);
+        const queryString = params.length ? `?${params.join("&")}` : "";
+        return {
+          url: `${TASKS_URL}${queryString}`,
+          method: "GET",
+          credentials: "include",
+        };
+      },
       providesTags: ['Task'],
     }),
 
@@ -48,6 +56,7 @@ export const postApiSlice = apiSlice.injectEndpoints({
         method: "GET",
         credentials: "include",
       }),
+      providesTags: (result, error, id) => [{ type: 'Task', id }],
     }),
 
     createSubTask: builder.mutation({
@@ -57,6 +66,7 @@ export const postApiSlice = apiSlice.injectEndpoints({
         body: data,
         credentials: "include",
       }),
+      invalidatesTags: (result, error, { id }) => [{ type: 'Task', id }],
     }),
 
     postTaskActivity: builder.mutation({

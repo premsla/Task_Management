@@ -164,8 +164,9 @@ const updateTask = asyncHandler(async (req, res) => {
     const task = await Task.findById(id);
 
     let newLinks = [];
-
-    if (links) {
+    if (Array.isArray(links)) {
+      newLinks = links;
+    } else if (typeof links === 'string') {
       newLinks = links.split(",");
     }
 

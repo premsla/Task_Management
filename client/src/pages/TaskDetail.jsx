@@ -11,20 +11,22 @@ import {
   MdOutlineMessage,
   MdTaskAlt,
 } from "react-icons/md";
-import { RxActivityLog } from "react-icons/rx";
-import { useParams } from "react-router-dom";
+
+import { useParams, useNavigate } from "react-router-dom";
 import { toast } from "sonner";
 import { Button, Loading, Tabs } from "../components";
 import { TaskColor } from "../components/tasks";
+
 import {
   useChangeSubTaskStatusMutation,
+  useChangeTaskStageMutation,
   useGetSingleTaskQuery,
   usePostTaskActivityMutation,
 } from "../redux/slices/api/taskApiSlice";
 import {
   PRIOTITYSTYELS,
   TASK_TYPE,
-  getCompletedSubTasks,
+  
   getInitials,
 } from "../utils";
 
@@ -49,12 +51,12 @@ const bgColor = {
 
 const TABS = [
   { title: "Task Detail", icon: <FaTasks /> },
-  { title: "Activities/Timeline", icon: <RxActivityLog /> },
+
 ];
 
 const TASKTYPEICON = {
   commented: (
-    <div className='w-10 h-10 rounded-full bg-gray-500 flex items-center justify-center text-white'>
+    <div className='w-10 h-10 rounded-full bg-green-500 flex items-center justify-center text-white'>
       <MdOutlineMessage />,
     </div>
   ),
@@ -64,7 +66,8 @@ const TASKTYPEICON = {
     </div>
   ),
   assigned: (
-    <div className='w-6 h-6 flex items-center justify-center rounded-full bg-gray-500 text-white'>
+    <div className='w-6 h-6 flex items-center justify-center rounded-full bg-green
+    -500 text-white'>
       <FaUser size={14} />
     </div>
   ),
@@ -89,9 +92,6 @@ const act_types = [
   "Started",
   "Completed",
   "In Progress",
-  "Commented",
-  "Bug",
-  "Assigned",
 ];
 
 const Activities = ({ activity, id, refetch }) => {
@@ -199,11 +199,15 @@ const Activities = ({ activity, id, refetch }) => {
 
 const TaskDetail = () => {
   const { id } = useParams();
+  const navigate = useNavigate();
   const { data, isLoading, refetch } = useGetSingleTaskQuery(id);
   const [subTaskAction, { isLoading: isSubmitting }] =
     useChangeSubTaskStatusMutation();
+  const [updateStage, { isLoading: isUpdatingStage }] =
+    useChangeTaskStageMutation();
 
   const [selected, setSelected] = useState(0);
+
   const task = data?.task || [];
 
   const handleSubmitAction = async (el) => {
@@ -225,24 +229,35 @@ const TaskDetail = () => {
     }
   };
 
+  const handleMarkInProgress = async () => {
+    await updateStage({ id, stage: 'in progress' });
+    navigate('/in-progress');
+  };
+
+  const handleMarkCompleted = async () => {
+    await updateStage({ id, stage: 'completed' });
+    navigate('/completed');
+  };
+
   if (isLoading)
     <div className='py-10'>
       <Loading />
     </div>;
 
-  const percentageCompleted =
-    task?.subTasks?.length === 0
-      ? 0
-      : (getCompletedSubTasks(task?.subTasks) / task?.subTasks?.length) * 100;
+  
 
   return (
     <div className='w-full flex flex-col gap-3 mb-4 overflow-y-hidden'>
       {/* task detail */}
       <h1 className='text-2xl text-gray-600 font-bold'>{task?.title}</h1>
+        {task?.description && (
+          <p className='text-base text-gray-500 dark:text-gray-300'>{task?.description}</p>
+        )}
+
       <Tabs tabs={TABS} setSelected={setSelected}>
         {selected === 0 ? (
           <>
-            <div className='w-full flex flex-col md:flex-row gap-5 2xl:gap-8 bg-white shadow rounded-md px-8 py-8 overflow-y-auto'>
+            <div className='w-full flex flex-col md:flex-row gap-5 2xl:gap-8 bg-gray-800 dark:bg-gray-800 shadow rounded-md px-8 py-8 overflow-y-auto'>
               <div className='w-full md:w-1/2 space-y-8'>
                 <div className='flex items-center gap-5'>
                   <div
@@ -266,136 +281,14 @@ const TaskDetail = () => {
                   Created At: {new Date(task?.date).toDateString()}
                 </p>
 
-                <div className='flex items-center gap-8 p-4 border-y border-gray-200'>
-                  <div className='space-x-2'>
-                    <span className='font-semibold'>Assets :</span>
-                    <span>{task?.assets?.length}</span>
-                  </div>
-                  <span className='text-gray-400'>|</span>
-                  <div className='space-x-2'>
-                    <span className='font-semibold'>Sub-Task :</span>
-                    <span>{task?.subTasks?.length}</span>
-                  </div>
-                </div>
 
-                <div className='space-y-4 py-6'>
-                  <p className='text-gray-500 font-semibold text-sm'>
-                    TASK TEAM
-                  </p>
-                  <div className='space-y-3'>
-                    {task?.team?.map((m, index) => (
-                      <div
-                        key={index + m?._id}
-                        className='flex gap-4 py-2 items-center border-t border-gray-200'
-                      >
-                        <div
-                          className={
-                            "w-10 h-10 rounded-full text-white flex items-center justify-center text-sm -mr-1 bg-blue-600"
-                          }
-                        >
-                          <span className='text-center'>
-                            {getInitials(m?.name)}
-                          </span>
-                        </div>
-                        <div>
-                          <p className='text-lg font-semibold'>{m?.name}</p>
-                          <span className='text-gray-500'>{m?.title}</span>
-                        </div>
-                      </div>
-                    ))}
-                  </div>
-                </div>
-                {task?.subTasks?.length > 0 && (
-                  <div className='space-y-4 py-6'>
-                    <div className='flex items-center gap-5'>
-                      <p className='text-gray-500 font-semibold text-sm'>
-                        SUB-TASKS
-                      </p>
-                      <div
-                        className={`w-fit h-8 px-2 rounded-full flex items-center justify-center text-white ${
-                          percentageCompleted < 50
-                            ? "bg-rose-600"
-                            : percentageCompleted < 80
-                            ? "bg-amber-600"
-                            : "bg-emerald-600"
-                        }`}
-                      >
-                        <p>{percentageCompleted.toFixed(2)}%</p>
-                      </div>
-                    </div>
-                    <div className='space-y-8'>
-                      {task?.subTasks?.map((el, index) => (
-                        <div key={index + el?._id} className='flex gap-3'>
-                          <div className='w-10 h-10 flex items-center justify-center rounded-full bg-violet-200'>
-                            <MdTaskAlt className='text-violet-600' size={26} />
-                          </div>
-
-                          <div className='space-y-1'>
-                            <div className='flex gap-2 items-center'>
-                              <span className='text-sm text-gray-500'>
-                                {new Date(el?.date).toDateString()}
-                              </span>
-
-                              <span className='px-2 py-0.5 text-center text-sm rounded-full bg-violet-100 text-violet-700 font-semibold lowercase'>
-                                {el?.tag}
-                              </span>
-
-                              <span
-                                className={`px-2 py-0.5 text-center text-sm rounded-full font-semibold ${
-                                  el?.isCompleted
-                                    ? "bg-emerald-100 text-emerald-700"
-                                    : "bg-amber-50 text-amber-600"
-                                }`}
-                              >
-                                {el?.isCompleted ? "done" : "in progress"}
-                              </span>
-                            </div>
-                            <p className='text-gray-700 pb-2'>{el?.title}</p>
-
-                            <>
-                              <button
-                                disabled={isSubmitting}
-                                className={`text-sm outline-none bg-gray-100 text-gray-800 p-1 rounded ${
-                                  el?.isCompleted
-                                    ? "hover:bg-rose-100 hover:text-rose-800"
-                                    : "hover:bg-emerald-100 hover:text-emerald-800"
-                                } disabled:cursor-not-allowed`}
-                                onClick={() =>
-                                  handleSubmitAction({
-                                    status: el?.isCompleted,
-                                    id: task?._id,
-                                    subId: el?._id,
-                                  })
-                                }
-                              >
-                                {isSubmitting ? (
-                                  <FaSpinner className='animate-spin' />
-                                ) : el?.isCompleted ? (
-                                  " Mark as Undone"
-                                ) : (
-                                  " Mark as Done"
-                                )}
-                              </button>
-                            </>
-                          </div>
-                        </div>
-                      ))}
-                    </div>
-                  </div>
-                )}
               </div>
 
               <div className='w-full md:w-1/2 space-y-3'>
                 {task?.description && (
                   <div className='mb-10'>
-                    <p className='text-lg font-semibold'>TASK DESCRIPTION</p>
-                    <div className='w-full'>{task?.description}</div>
-                  </div>
-                )}
 
-                {task?.assets?.length > 0 && (
-                  <div className='pb-10'>
-                    <p className='text-lg font-semibold'>ASSETS</p>
+                
                     <div className='w-full grid grid-cols-1 md:grid-cols-2 gap-4'>
                       {task?.assets?.map((el, index) => (
                         <img
@@ -435,6 +328,19 @@ const TaskDetail = () => {
           </>
         )}
       </Tabs>
+      {/* Completed button below content */}
+      {task?.stage !== 'completed' && (
+        <div className='flex justify-end mt-6'>
+          <button
+            disabled={isUpdatingStage}
+            onClick={handleMarkCompleted}
+            className='bg-green-600 text-white px-4 py-2 rounded'
+          >
+            {isUpdatingStage ? 'Updating...' : 'Mark Completed'}
+          </button>
+        </div>
+      )}
+      
     </div>
   );
 };

@@ -10,7 +10,7 @@ import { useTrashTastMutation } from "../redux/slices/api/taskApiSlice.js";
 import { BGS, PRIOTITYSTYELS, TASK_TYPE, formatDate } from "../utils/index.js";
 
 import { Button, ConfirmatioDialog, UserInfo } from "./index";
-import { AddTask, TaskAssets, TaskColor } from "./tasks";
+import { AddTask, TaskColor } from "./tasks";
 import { Link } from "react-router-dom";
 
 const ICONS = {
@@ -56,13 +56,13 @@ const Table = ({ tasks }) => {
   };
 
   const TableHeader = () => (
-    <thead className='w-full border-b border-gray-300 dark:border-gray-600'>
+    <thead className='w-full border-b border-gray-300 dark:border-gray-600 bg-gray-200 dark:bg-gray-700'>
       <tr className='w-full text-black dark:text-white  text-left'>
         <th className='py-2'>Task Title</th>
         <th className='py-2'>Priority</th>
         <th className='py-2 line-clamp-1'>Created At</th>
-        <th className='py-2'>Assets</th>
-        <th className='py-2'>Team</th>
+        
+        
       </tr>
     </thead>
   );
@@ -97,29 +97,9 @@ const Table = ({ tasks }) => {
         </span>
       </td>
 
-      <td className='py-2'>
-        <TaskAssets
-          activities={task?.activities?.length}
-          subTasks={task?.subTasks}
-          assets={task?.assets?.length}
-        />
-      </td>
+      
 
-      <td className='py-2'>
-        <div className='flex'>
-          {task?.team?.map((m, index) => (
-            <div
-              key={m._id}
-              className={clsx(
-                "w-7 h-7 rounded-full text-white flex items-center justify-center text-sm -mr-1",
-                BGS[index % BGS?.length]
-              )}
-            >
-              <UserInfo user={m} />
-            </div>
-          ))}
-        </div>
-      </td>
+      
 
       <td className='py-2 flex gap-2 md:gap-4 justify-end'>
         <Button
@@ -141,7 +121,7 @@ const Table = ({ tasks }) => {
 
   return (
     <>
-      <div className='bg-white  px-2 md:px-4 pt-4 pb-9 shadow-md rounded'>
+      <div className='bg-gray-100 dark:bg-gray-800 px-2 md:px-4 pt-4 pb-9 shadow-md rounded'>
         <div className='overflow-x-auto'>
           <table className='w-full '>
             <TableHeader />

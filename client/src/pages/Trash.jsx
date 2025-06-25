@@ -114,8 +114,8 @@ const Trash = () => {
   };
 
   const TableHeader = () => (
-    <thead className='border-b border-gray-300 dark:border-gray-600'>
-      <tr className='text-black dark:text-white  text-left'>
+    <thead className='bg-gray-700 dark:bg-gray-800 border-b border-gray-800 dark:border-gray-800'>
+      <tr className='text-white text-left'>
         <th className='py-2'>Task Title</th>
         <th className='py-2'>Priority</th>
         <th className='py-2'>Stage</th>
@@ -125,7 +125,7 @@ const Trash = () => {
   );
 
   const TableRow = ({ item }) => (
-    <tr className='border-b border-gray-200 dark:border-gray-700 text-gray-600 dark:text-gray-400 hover:bg-gray-400/10'>
+    <tr className='border-b border-gray-800 dark:border-gray-700 text-gray-600 dark:text-gray-400 hover:bg-gray-400/10'>
       <td className='py-2'>
         <div className='flex items-center gap-2'>
           <TaskColor className={TASK_TYPE[item.stage]} />
@@ -177,7 +177,7 @@ const Trash = () => {
               <Button
                 label='Restore All'
                 icon={<MdOutlineRestore className='text-lg hidden md:flex' />}
-                className='flex flex-row-reverse gap-1 items-center  text-black text-sm md:text-base rounded-md 2xl:py-2.5'
+                className='flex flex-row-reverse gap-1 items-center text-white text-sm md:text-base bg-gray-600 hover:bg-gray-500 rounded-md 2xl:py-2.5'
                 onClick={() => restoreAllClick()}
               />
               <Button
@@ -190,7 +190,7 @@ const Trash = () => {
           )}
         </div>
         {data?.tasks?.length > 0 ? (
-          <div className='bg-white dark:bg-[#1f1f1f] px-2 md:px-6 py-4 shadow-md rounded'>
+          <div className='bg-gray-700 dark:bg-gray-800 px-2 md:px-6 py-4 shadow-md rounded'>
             <div className='overflow-x-auto'>
               <table className='w-full mb-5'>
                 <TableHeader />

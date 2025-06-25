@@ -13,8 +13,8 @@ import {
   Tasks,
   Trash,
   Users,
-  StatusPage,
 } from "./pages/index.js";
+
 import { setOpenSidebar } from "./redux/slices/authSlice";
 
 function Layout() {
@@ -23,7 +23,7 @@ function Layout() {
 
   return user ? (
     <div className='w-full h-screen flex flex-col md:flex-row'>
-      <div className='w-1/5 h-screen bg-white dark:bg-[#1f1f1f] sticky top-0 hidden md:block'>
+      <div className='w-1/5 h-screen bg-gray-100 dark:bg-gray-800 sticky top-0 hidden md:block'>
         <Sidebar />
       </div>
 
@@ -70,7 +70,7 @@ const MobileSidebar = () => {
              ${isSidebarOpen ? "translate-x-0" : "-translate-x-full"}`}
             onClick={() => closeSidebar()}
           >
-            <div className='bg-white w-3/4 h-full'>
+            <div className='bg-gray-100 dark:bg-gray-800 w-3/4 h-full'>
               <div className='w-full flex justify-end px-5 pt-5'>
                 <button
                   onClick={() => closeSidebar()}
@@ -96,7 +96,7 @@ const App = () => {
 
   return (
     <main className={theme}>
-      <div className='w-full min-h-screen bg-[#f3f4f6] dark:bg-[#0d0d0df4]'>
+      <div className='w-full min-h-screen bg-gray-100 dark:bg-gray-900'>
         <Routes>
           <Route element={<Layout />}>
             <Route index path='/' element={<Navigate to='/dashboard' />} />
@@ -107,8 +107,7 @@ const App = () => {
             <Route path='/todo/:status?' element={<Tasks />} />
             <Route path='/trashed' element={<Trash />} />
             <Route path='/task/:id' element={<TaskDetail />} />
-            <Route path='/team' element={<Users />} />
-            <Route path='/status' element={<StatusPage />} />
+          
           </Route>
 
           <Route path='/log-in' element={<Login />} />

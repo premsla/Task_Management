@@ -2,7 +2,7 @@ import { useForm } from "react-hook-form";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate, useSearchParams } from "react-router-dom";
 import { toast } from "sonner";
-import { Button, Loading, Textbox, SocialLogin } from "../components";
+import { Button, Loading, Textbox } from "../components";
 import { useRegisterMutation } from "../redux/slices/api/authApiSlice";
 import { setCredentials } from "../redux/slices/authSlice";
 import { useEffect } from "react";
@@ -10,6 +10,7 @@ import { useEffect } from "react";
 const Signup = () => {
   const { user } = useSelector((state) => state.auth);
   const [searchParams] = useSearchParams();
+  console.log('⚙️ Signup component mount, searchParams:', Object.fromEntries(searchParams.entries()));
   const {
     register,
     handleSubmit,
@@ -42,48 +43,9 @@ const Signup = () => {
     }
   };
 
-  useEffect(() => {
-    // Check for social login token in URL
-    const token = searchParams.get('token');
-    if (token) {
-      // Handle social login success
-      handleSocialLoginSuccess(token);
-    }
-
-    // Check for social login error
-    const error = searchParams.get('error');
-    if (error === 'auth_failed') {
-      toast.error('Social login failed. Please try again.');
-    }
-
-    user && navigate("/dashboard");
-  }, [user, searchParams]);
-
-  const handleSocialLoginSuccess = async (token) => {
-    try {
-      // Call API to validate token and get user info
-      const response = await fetch(`${import.meta.env.VITE_APP_BASE_URL || 'http://localhost:8800'}/api/auth/social-success`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({ token }),
-      });
-
-      const data = await response.json();
-
-      if (data.success) {
-        dispatch(setCredentials(data));
-        toast.success('Account created successfully!');
-        navigate("/dashboard");
-      } else {
-        toast.error(data.message || 'Social login failed');
-      }
-    } catch (error) {
-      console.error('Social login error:', error);
-      toast.error('Social login failed. Please try again.');
-    }
-  };
+  // Handle social login success
+ 
+  
 
   return (
     <div className='w-full min-h-screen flex items-center justify-center flex-col lg:flex-row bg-[#f3f4f6] dark:bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))] from-[#302943] via-slate-900 to-black'>
@@ -94,8 +56,8 @@ const Signup = () => {
               Create your account!
             </span>
             <p className='flex flex-col gap-0 md:gap-4 text-4xl md:text-6xl 2xl:text-7xl font-black text-center dark:text-gray-400 text-blue-700'>
-              <span>Join the</span>
-              <span>Task Manager</span>
+              <span>Idea box</span>
+              
             </p>
 
             <div className='cell'>
@@ -186,9 +148,6 @@ const Signup = () => {
                 className='bg-blue-600 hover:bg-blue-700 text-white'
               />
             )}
-
-            {/* Social Login Section */}
-            <SocialLogin />
 
             <div className='flex items-center justify-center gap-2 text-sm text-gray-600 dark:text-gray-400 mt-4'>
               <span>Already have an account?</span>

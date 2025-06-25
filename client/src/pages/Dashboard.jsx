@@ -17,11 +17,11 @@ import { useSelector } from "react-redux";
 
 const Card = ({ label, count, bg, icon }) => {
   return (
-    <div className='w-full h-32 bg-white p-5 shadow-md rounded-md flex items-center justify-between'>
+    <div className='w-full h-32 bg-white dark:bg-gray-800 p-5 shadow-md dark:shadow-gray-700 rounded-md flex items-center justify-between'>
       <div className='h-full flex flex-1 flex-col justify-between'>
-        <p className='text-base text-gray-600'>{label}</p>
+        <p className='text-base text-white'>{label}</p>
         <span className='text-2xl font-semibold'>{count}</span>
-        <span className='text-sm text-gray-400'>{"111 last month"}</span>
+        <span className='text-sm text-gray-400'></span>
       </div>
       <div
         className={clsx(
@@ -74,28 +74,28 @@ const Dashboard = () => {
   const stats = [
     {
       _id: "1",
-      label: "TOTAL TASK",
+      label: "TOTAL IDEAS",
       total: data?.totalTasks || 0,
       icon: <FaNewspaper />,
       bg: "bg-[#1d4ed8]",
     },
     {
       _id: "2",
-      label: "COMPLTED TASK",
+      label: "DONE",
       total: totals["completed"] || 0,
       icon: <MdAdminPanelSettings />,
       bg: "bg-[#0f766e]",
     },
     {
       _id: "3",
-      label: "TASK IN PROGRESS ",
+      label: "IN PROGRESS",
       total: totals["in progress"] || 0,
       icon: <LuClipboardEdit />,
       bg: "bg-[#f59e0b]",
     },
     {
       _id: "4",
-      label: "TODOS",
+      label: "IDEAS",
       total: totals["todo"],
       icon: <FaArrowsToDot />,
       bg: "bg-[#be185d]" || 0,
@@ -111,7 +111,7 @@ const Dashboard = () => {
           ))}
         </div>
 
-        <div className='w-full bg-white my-16 p-4 rounded shadow-sm'>
+        <div className='w-full bg-white dark:bg-gray-800 my-16 p-4 rounded shadow-sm'>
           <h4 className='text-xl text-gray-500 font-bold mb-2'>
             Chart by Priority
           </h4>
@@ -140,7 +140,7 @@ const UserTable = ({ users }) => {
   );
 
   const TableRow = ({ user }) => (
-    <tr className='border-b border-gray-200 dark:border-gray-700 text-gray-600 dark:text-gray-400 hover:bg-gray-400/10'>
+    <tr className='border-b border-gray-800 dark:border-gray-700 text-gray-600 dark:text-gray-400 hover:bg-gray-400/10'>
       <td className='py-2'>
         <div className='flex items-center gap-3'>
           <div className='w-9 h-9 rounded-full text-white flex items-center justify-center text-sm bg-violet-700'>
@@ -191,24 +191,24 @@ const TaskTable = ({ tasks }) => {
   };
 
   const TableHeader = () => (
-    <thead className='border-b border-gray-300 dark:border-gray-600'>
+    <thead className='border-b border-gray-300 dark:border-gray-800'>
       <tr className='text-black dark:text-white  text-left'>
         <th className='py-2'>Task Title</th>
         <th className='py-2'>Priority</th>
-        <th className='py-2'>Team</th>
+
         <th className='py-2 hidden md:block'>Created At</th>
       </tr>
     </thead>
   );
 
   const TableRow = ({ task }) => (
-    <tr className='border-b border-gray-200 text-gray-600 hover:bg-gray-300/10'>
+    <tr className='border-b border-gray-800 text-white hover:bg-gray-800/10'>
       <td className='py-2'>
         <div className='flex items-center gap-2'>
           <div
             className={clsx("w-4 h-4 rounded-full", TASK_TYPE[task.stage])}
           />
-          <p className='text-base text-black dark:text-gray-400'>
+          <p className='text-base text-white'>
             {task?.title}
           </p>
         </div>
@@ -222,21 +222,7 @@ const TaskTable = ({ tasks }) => {
         </div>
       </td>
 
-      <td className='py-2'>
-        <div className='flex'>
-          {task?.team.map((m, index) => (
-            <div
-              key={index}
-              className={clsx(
-                "w-7 h-7 rounded-full text-white flex items-center justify-center text-sm -mr-1",
-                BGS[index % BGS?.length]
-              )}
-            >
-              <UserInfo user={m} />
-            </div>
-          ))}
-        </div>
-      </td>
+
 
       <td className='py-2 hidden md:block'>
         <span className='text-base text-gray-600'>

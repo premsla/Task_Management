@@ -1,8 +1,18 @@
+// Ensure env variables loaded
+import 'dotenv/config';
+// Base server URL for OAuth callbacks
+const SERVER_URL = process.env.SERVER_URL || 'http://localhost:8800';
 import passport from 'passport';
 import { Strategy as GoogleStrategy } from 'passport-google-oauth20';
 import { Strategy as GitHubStrategy } from 'passport-github2';
 import { Strategy as FacebookStrategy } from 'passport-facebook';
 import User from '../models/userModel.js';
+
+// Debug: log Google OAuth credentials
+console.log('⚙️ Google OAuth Config:', {
+  GOOGLE_CLIENT_ID: process.env.GOOGLE_CLIENT_ID,
+  GOOGLE_CLIENT_SECRET: process.env.GOOGLE_CLIENT_SECRET
+});
 
 // Serialize user for session
 passport.serializeUser((user, done) => {
@@ -24,7 +34,7 @@ if (process.env.GOOGLE_CLIENT_ID && process.env.GOOGLE_CLIENT_SECRET) {
   passport.use(new GoogleStrategy({
     clientID: process.env.GOOGLE_CLIENT_ID,
     clientSecret: process.env.GOOGLE_CLIENT_SECRET,
-    callbackURL: "/api/auth/google/callback"
+    callbackURL: `${SERVER_URL}/api/auth/google/callback`
   }, async (accessToken, refreshToken, profile, done) => {
   try {
     // Check if user already exists with this Google ID

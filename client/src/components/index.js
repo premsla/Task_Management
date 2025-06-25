@@ -1,6 +1,5 @@
 import AddUser from "./AddUser";
 import Button from "./Button";
-import ChangePassword from "./ChangePassword";
 import { Chart } from "./Chart";
 import ConfirmatioDialog, { UserAction } from "./ConfirmationDialog";
 import Loading from "./Loading";
@@ -8,7 +7,6 @@ import ModalWrapper from "./ModalWrapper";
 import Navbar from "./Navbar";
 import SelectList from "./SelectList";
 import Sidebar from "./Sidebar";
-import SocialLogin from "./SocialLogin";
 import Table from "./Table";
 import Tabs from "./Tabs";
 import Textbox from "./Textbox";
@@ -19,7 +17,7 @@ import UserInfo from "./UserInfo";
 export {
   AddUser,
   Button,
-  ChangePassword,
+
   Chart,
   ConfirmatioDialog,
   Loading,
@@ -27,7 +25,7 @@ export {
   Navbar,
   SelectList,
   Sidebar,
-  SocialLogin,
+
   Table,
   Tabs,
   Textbox,

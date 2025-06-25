@@ -1,17 +1,15 @@
 import clsx from "clsx";
 import React from "react";
-import { FaTasks, FaTrashAlt, FaUsers } from "react-icons/fa";
+import { FaTasks, FaTrashAlt, } from "react-icons/fa";
 import {
   MdDashboard,
   MdOutlineAddTask,
   MdOutlinePendingActions,
-  MdSettings,
   MdTaskAlt,
 } from "react-icons/md";
 import { useDispatch, useSelector } from "react-redux";
 import { Link, useLocation } from "react-router-dom";
 import { setOpenSidebar } from "../redux/slices/authSlice";
-import { IoCheckmarkDoneOutline } from "react-icons/io5";
 
 const linkData = [
   {
@@ -20,12 +18,12 @@ const linkData = [
     icon: <MdDashboard />,
   },
   {
-    label: "Tasks",
+    label: "Ideas",
     link: "tasks",
     icon: <FaTasks />,
   },
   {
-    label: "Completed",
+    label: "Done",
     link: "completed/completed",
     icon: <MdTaskAlt />,
   },
@@ -34,26 +32,14 @@ const linkData = [
     link: "in-progress/in progress",
     icon: <MdOutlinePendingActions />,
   },
-  {
-    label: "To Do",
-    link: "todo/todo",
-    icon: <MdOutlinePendingActions />,
-  },
-  {
-    label: "Team",
-    link: "team",
-    icon: <FaUsers />,
-  },
-  {
-    label: "Status",
-    link: "status",
-    icon: <IoCheckmarkDoneOutline />,
-  },
+
+
   {
     label: "Trash",
     link: "trashed",
     icon: <FaTrashAlt />,
   },
+
 ];
 
 const Sidebar = () => {
@@ -62,7 +48,7 @@ const Sidebar = () => {
   const dispatch = useDispatch();
   const location = useLocation();
   const path = location.pathname.split("/")[1];
-  const sidebarLinks = user?.isAdmin ? linkData : linkData.slice(0, 6); // Include Team for all users
+  const sidebarLinks = user?.isAdmin ? linkData : linkData.slice(0, 7); // Include Team for all users
 
   const closeSidebar = () => {
     dispatch(setOpenSidebar(false));
@@ -72,7 +58,7 @@ const Sidebar = () => {
     return (
       <Link
         onClick={closeSidebar}
-        to={el.link}
+        to={`/${el.link}`}
         className={clsx(
           "w-fult lg:w-3/4 flex gap-2 px-3 py-2 rounded-full items-center text-gray-800 dark:text-gray-400 text-base hover:bg-[#2564ed2d]",
           path === el.link.split("/")[0] ? "bg-blue-700 text-white" : ""
@@ -91,7 +77,7 @@ const Sidebar = () => {
           <MdOutlineAddTask className='text-white text-2xl font-black' />
         </p>
         <span className='text-2xl font-bold text-black dark:text-white'>
-          TaskMe
+          Idea Box
         </span>
       </h1>
 
@@ -101,12 +87,6 @@ const Sidebar = () => {
         ))}
       </div>
 
-      <div className=''>
-        <button className='w-full flex gap-2 p-2 items-center text-lg text-gray-800 dark:text-white'>
-          <MdSettings />
-          <span>Settings</span>
-        </button>
-      </div>
     </div>
   );
 };

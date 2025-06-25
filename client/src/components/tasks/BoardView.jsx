@@ -31,7 +31,7 @@ const BoardView = ({ tasks, status }) => {
     <div className={`w-full py-4 grid ${getGridCols()} gap-4 2xl:gap-10`}>
       {(!status || status === "todo") && (
         <TaskColumn
-          title="TO DO"
+          title="IDEAS"
           tasks={todoTasks}
           bgColor="bg-blue-600"
         />
@@ -45,7 +45,7 @@ const BoardView = ({ tasks, status }) => {
       )}
       {(!status || status === "completed") && (
         <TaskColumn
-          title="COMPLETED"
+          title="DONE"
           tasks={completedTasks}
           bgColor="bg-green-600"
         />

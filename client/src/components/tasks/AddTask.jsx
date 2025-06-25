@@ -1,10 +1,4 @@
 import { Dialog } from "@headlessui/react";
-import {
-  getDownloadURL,
-  getStorage,
-  ref,
-  uploadBytesResumable,
-} from "firebase/storage";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { BiImages } from "react-icons/bi";
@@ -15,61 +9,30 @@ import {
   useUpdateTaskMutation,
 } from "../../redux/slices/api/taskApiSlice";
 import { dateFormatter } from "../../utils";
-import { app } from "../../utils/firebase";
+
 import Button from "../Button";
 import Loading from "../Loading";
 import ModalWrapper from "../ModalWrapper";
 import SelectList from "../SelectList";
 import Textbox from "../Textbox";
-import UserList from "./UsersSelect";
+
 
 const LISTS = ["TODO", "IN PROGRESS", "COMPLETED"];
 const PRIORIRY = ["HIGH", "MEDIUM", "NORMAL", "LOW"];
-
 const uploadedFileURLs = [];
 
-const uploadFile = async (file) => {
-  const storage = getStorage(app);
-
-  const name = new Date().getTime() + file.name;
-  const storageRef = ref(storage, name);
-
-  const uploadTask = uploadBytesResumable(storageRef, file);
-
-  return new Promise((resolve, reject) => {
-    uploadTask.on(
-      "state_changed",
-      (snapshot) => {
-        console.log("Uploading");
-      },
-      (error) => {
-        reject(error);
-      },
-      () => {
-        getDownloadURL(uploadTask.snapshot.ref)
-          .then((downloadURL) => {
-            uploadedFileURLs.push(downloadURL);
-            resolve();
-          })
-          .catch((error) => {
-            reject(error);
-          });
-      }
-    );
-  });
-};
+const uploadFile = async (file) => Promise.resolve();
 
 const AddTask = ({ open, setOpen, task }) => {
 
   const defaultValues = {
     title: task?.title || "",
-    date: dateFormatter(task?.date || new Date()),
-    team: [],
-    stage: "",
+    startDate: dateFormatter(task?.startDate || new Date()),
+    endDate: dateFormatter(task?.endDate || new Date()),
+
     priority: "",
-    assets: [],
     description: "",
-    links: "",
+
   };
   const {
     register,
@@ -78,7 +41,7 @@ const AddTask = ({ open, setOpen, task }) => {
   } = useForm({ defaultValues });
 
   const [stage, setStage] = useState(task?.stage?.toUpperCase() || LISTS[0]);
-  const [team, setTeam] = useState(task?.team || []);
+  
   const [priority, setPriority] = useState(
     task?.priority?.toUpperCase() || PRIORIRY[2]
   );
@@ -106,7 +69,7 @@ const AddTask = ({ open, setOpen, task }) => {
       const newData = {
         ...data,
         assets: [...URLS, ...uploadedFileURLs],
-        team,
+        
         stage,
         priority,
       };
@@ -153,54 +116,15 @@ const AddTask = ({ open, setOpen, task }) => {
               })}
               error={errors.title ? errors.title.message : ""}
             />
-            <UserList setTeam={setTeam} team={team} />
+            
             <div className='flex gap-4'>
-              <SelectList
-                label='Task Stage'
-                lists={LISTS}
-                selected={stage}
-                setSelected={setStage}
-              />
-              <SelectList
-                label='Priority Level'
-                lists={PRIORIRY}
-                selected={priority}
-                setSelected={setPriority}
-              />
+              <SelectList label='Task Stage' lists={LISTS} selected={stage} setSelected={setStage} />
+              <SelectList label='Priority Level' lists={PRIORIRY} selected={priority} setSelected={setPriority} />
             </div>
             <div className='flex gap-4'>
-              <div className='w-full'>
-                <Textbox
-                  placeholder='Date'
-                  type='date'
-                  name='date'
-                  label='Task Date'
-                  className='w-full rounded'
-                  register={register("date", {
-                    required: "Date is required!",
-                  })}
-                  error={errors.date ? errors.date.message : ""}
-                />
-              </div>
-              <div className='w-full flex items-center justify-center mt-4'>
-                <label
-                  className='flex items-center gap-1 text-base text-ascent-2 hover:text-ascent-1 cursor-pointer my-4'
-                  htmlFor='imgUpload'
-                >
-                  <input
-                    type='file'
-                    className='hidden'
-                    id='imgUpload'
-                    onChange={(e) => handleSelect(e)}
-                    accept='.jpg, .png, .jpeg'
-                    multiple={true}
-                  />
-                  <BiImages />
-                  <span>Add Assets</span>
-                </label>
-              </div>
+              <Textbox placeholder='Start Date' type='date' name='startDate' label='Start Date' className='w-full rounded' register={register("startDate", { required: "Start Date is required!" })} error={errors.startDate ? errors.startDate.message : ""} />
+              <Textbox placeholder='End Date' type='date' name='endDate' label='End Date' className='w-full rounded' register={register("endDate", { required: "End Date is required!" })} error={errors.endDate ? errors.endDate.message : ""} />
             </div>
-
             <div className='w-full'>
               <p>Task Description</p>
               <textarea
@@ -213,22 +137,7 @@ const AddTask = ({ open, setOpen, task }) => {
               ></textarea>
             </div>
 
-            <div className='w-full'>
-              <p>
-                Add Links{" "}
-                <span className='text- text-gray-600'>
-                  seperated by comma (,)
-                </span>
-              </p>
-              <textarea
-                name='links'
-                {...register("links")}
-                className='w-full bg-transparent px-3 py-1.5 2xl:py-3 border border-gray-300
-            dark:border-gray-600 placeholder-gray-300 dark:placeholder-gray-700
-            text-gray-900 dark:text-white outline-none text-base focus:ring-2
-            ring-blue-300'
-              ></textarea>
-            </div>
+            
           </div>
 
           {isLoading || isUpdating || uploading ? (

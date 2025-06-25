@@ -3,16 +3,16 @@ import TaskColor from "./TaskColor";
 
 const TaskTitle = ({ label, className }) => {
   return (
-    <div className='w-full h-10 md:h-12 px-2 md:px-4 rounded bg-white dark:bg-[#1f1f1f] flex items-center justify-between'>
+    <div className='w-full h-10 md:h-12 px-2 md:px-4 rounded bg-gray-700 dark:bg-gray-800 flex items-center justify-between'>
       <div className='flex gap-2 items-center'>
         <TaskColor className={className} />
-        <p className='text-sm md:text-base text-gray-600 dark:text-gray-300'>
+        <p className='text-sm md:text-base text-white'>
           {label}
         </p>
       </div>
 
       <button onClick={onclick} className='hidden md:block'>
-        <IoMdAdd className='text-lg text-black dark:text-gray-300' />
+        <IoMdAdd className='text-lg text-gray-300 dark:text-gray-400' />
       </button>
     </div>
   );
