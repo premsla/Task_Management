@@ -6,11 +6,7 @@ This is a full-stack **Todo Task Management Web Application** built as part of t
 
 ---
 
-## 🎥 Project Walkthrough Video
 
-📹 [Watch the Demo Video on Loom](https://drive.google.com/file/d/16oExM62GwxW2tUFelyY77RHiPeOctA83/view?usp=sharing)
-
----
 
 ##  Tech Stack
 
@@ -152,41 +148,3 @@ project-root/
 │
 └── README.md
 ```
-
----
-
-##  Architecture Diagram
-
-![Architecture Diagram](https://your-image-link.com/diagram.png)
-
----
-
-
-##  Assumptions
-
-- Tasks are private per user and not shared between users.
-- Social login buttons are shown only if respective credentials are configured.
-- JWT tokens are stored in localStorage for simplicity in this version.
-- Validation is done on both client and server.
-
----
-
-##  Additional Notes
-
-- The frontend is mobile responsive using Tailwind CSS.
-- The backend is modular with separate controllers and route handling.
-- You can use any deployment platform of your choice; this project used Vercel and Render.
-
----
-
-##  Submission Info
-
-This project is a part of a hackathon run by [https://www.katomaran.com](https://www.katomaran.com)
-
-
----
-
-
-> Thank you for checking out this project! ✨ Feedback and contributions are welcome.
-=======
-
