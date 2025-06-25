@@ -5,8 +5,7 @@ yarn-debug.log*
 yarn-error.log*
 pnpm-debug.log*
 lerna-debug.log*
-
-# Environment variables
+# Environment variab
 .env
 .env.local
 .env.development.local
